@@ -12,7 +12,7 @@ Welcome to my ToDo App!
 - JWT (Jason Web Token)
 - MySQL / H2 database
 - JUnit & Integration tests
-- 
+
 
 
 ## Features
