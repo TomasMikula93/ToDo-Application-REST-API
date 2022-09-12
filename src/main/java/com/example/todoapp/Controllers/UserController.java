@@ -14,13 +14,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
 
     private final ToDoUserService toDoUserService;
-    private final ToDoListService toDoListService;
 
 
     @PostMapping("/registration")
@@ -32,20 +32,11 @@ public class UserController {
         return ResponseEntity.status(200).body(new UserDTO(toDoUserService.findByUser(toDoUser).getId(), toDoUser.getUsername()));
     }
 
-    @GetMapping("/list/{idOfToDoList}")
-    public ResponseEntity<Object> toDoList(@RequestHeader(value = "Authorization") String token, @PathVariable long idOfToDoList) {
-        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfToDoList) || token.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                    body(new ErrorMsgDTO("This ToDo List does not belong to authenticated player"));
-        }
-        if (toDoListService.checkSizeOfList(idOfToDoList)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                    body(new ErrorMsgDTO("Your ToDo list is empty!"));
-        }
-        ToDoListDTO toDoListDTO = toDoListService.makeToDoListDTO(idOfToDoList);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                body(toDoListDTO);
-    }
 
+    // just for testing React front-end s
+    @GetMapping("/user")
+    public ResponseEntity<Object> getUsers(){
+        return ResponseEntity.status(200).body(toDoUserService.makeListOfUsersDTO());
+    }
 
 }

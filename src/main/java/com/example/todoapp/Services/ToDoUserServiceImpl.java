@@ -1,5 +1,6 @@
 package com.example.todoapp.Services;
 
+import com.example.todoapp.Models.DTOs.UserDTO;
 import com.example.todoapp.Models.Enums.Roles;
 import com.example.todoapp.Models.ToDoList;
 import com.example.todoapp.Models.ToDoUser;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,6 +48,22 @@ public class ToDoUserServiceImpl implements ToDoUserService, UserDetailsService 
     @Override
     public ToDoUser findByUser(ToDoUser toDoUser) {
         return toDoUserRepository.findByUsername(toDoUser.getUsername());
+    }
+
+    @Override
+    public List<ToDoUser> findAllUsers() {
+        return toDoUserRepository.findAll();
+    }
+
+    @Override
+    public List<UserDTO> makeListOfUsersDTO() {
+        List<ToDoUser> sublist = findAllUsers();
+        List<UserDTO> list = new ArrayList<>();
+        for (ToDoUser toDoUser : sublist) {
+            list.add(new UserDTO(toDoUser.getId(),
+                    toDoUser.getUsername()));
+        }
+        return list;
     }
 
     @Override

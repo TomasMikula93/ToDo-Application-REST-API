@@ -37,6 +37,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // we don't store any information about the logged-in user in memory, (only DB users)
         http.authorizeRequests().antMatchers("/api/registration").permitAll();
         http.authorizeRequests().antMatchers("/api/login").permitAll();
+        http.authorizeRequests().antMatchers("/api/user").permitAll();
         http.authorizeRequests().anyRequest().authenticated(); // any other request, must be authenticated
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
