@@ -20,14 +20,14 @@ jobs:
     #          DB_URL: jdbc:mysql://localhost/tribes?serverTimezone=UTC
     #          DB_DRIVER: com.mysql.cj.jdbc.Driver
 
-    steps:             #the repository is checked out from GitHub.
+    steps: #the repository is checked out from GitHub.
       - checkout
-     
+
 
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "build.gradle" }}
-      - run:          # this command will download the required dependencies
+      - run: # this command will download the required dependencies
           name: Gradlew build
           command: |
             sudo chmod +x gradlew
@@ -42,10 +42,6 @@ jobs:
       - store_artifacts:
           path: build/reports/tests/test
           destination: test_result
-
-      - store_artifacts:
-          path: build/reports/jacoco
-          destination: test_coverage
 
       - store_artifacts:
           path: build/reports/checkstyle
