@@ -6,7 +6,6 @@ Welcome to my ToDo App!
 
 ## Technologies Used
 - Spring Boot Application
-- Spring Boot Application
 - Automatically deployed on heroku via CirleCI
 - https://todo-application-tm.herokuapp.com/
 
