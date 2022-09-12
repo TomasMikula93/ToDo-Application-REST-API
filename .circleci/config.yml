@@ -36,8 +36,7 @@ jobs:
       - store_test_results: # required to view test result in CircleCI
           path: build/test-results
 
-          # After that, reports (test execution, Jacoco, CheckStyle) are saved to the Artifacts section.
-          # Jacoco = Test coverage is checked with Jacoco.
+          # After that, reports (test execution, CheckStyle) are saved to the Artifacts section.
           # Checkstyle = Code style checks
       - store_artifacts:
           path: build/reports/tests/test
@@ -66,7 +65,7 @@ workflows:
           force: false
           maintenance-mode: false
           api-key: HEROKU_API_KEY # environment variables, i set it in circleCI -> project settings
-          app-name: tribes-b
+          app-name: todo-application-tm
           branch: master
 
 
