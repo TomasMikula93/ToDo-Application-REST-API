@@ -19,3 +19,14 @@ Welcome to my ToDo App!
 - Mark your Task as Done 
 - Change task name or description
 - Delete them when it's done
+
+
+## Room for Improvement
+To do:
+- React.js front-end 
+
+
+## Contact
+- Created by t.mikula@centrum.cz, 
+https://www.linkedin.com/in/tom%C3%A1%C5%A1-mikula-29695b240/
+- feel free to contact me!
