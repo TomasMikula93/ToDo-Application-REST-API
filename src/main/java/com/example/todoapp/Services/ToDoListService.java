@@ -18,4 +18,6 @@ public interface ToDoListService {
     void changeTaskDescription(Task task);
 
     void deleteTask(Task task);
+
+    void changeTaskPriority(Task task);
 }
