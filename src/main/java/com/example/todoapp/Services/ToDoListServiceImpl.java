@@ -2,6 +2,7 @@ package com.example.todoapp.Services;
 
 import com.example.todoapp.Models.DTOs.TaskDTO;
 import com.example.todoapp.Models.DTOs.ToDoListDTO;
+import com.example.todoapp.Models.Enums.Priority;
 import com.example.todoapp.Models.Task;
 import com.example.todoapp.Models.ToDoList;
 import com.example.todoapp.Repositories.TaskRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ public class ToDoListServiceImpl implements ToDoListService {
             list.add(new TaskDTO(task.getId(),
                     task.getName(),
                     task.getDescription(),
+                    task.getPriority(),
                     task.isDone()));
         }
         return new ToDoListDTO(list);
@@ -45,7 +48,7 @@ public class ToDoListServiceImpl implements ToDoListService {
 
     @Override
     public void addTaskToList(Task task, long idOfToDoList) {
-        Task task1 = new Task(task.getName(), task.getDescription());
+        Task task1 = new Task(task.getName(), task.getDescription(), Priority.NORMAL.getPriority());
         ToDoList toDoList = toDoListRepository.findById(idOfToDoList);
         taskRepository.save(task1);
         task1.setToDoList(toDoList);

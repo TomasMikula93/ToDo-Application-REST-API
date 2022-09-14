@@ -17,6 +17,8 @@ public class Task {
     private long id;
     private String name;
     private String description;
+
+    private String priority;
     private boolean isDone;
 
     @ManyToOne
@@ -26,6 +28,13 @@ public class Task {
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
+        this.isDone = false;
+    }
+
+    public Task(String name, String description, String priority) {
+        this.name = name;
+        this.description = description;
+        this.priority = priority;
         this.isDone = false;
     }
 }
