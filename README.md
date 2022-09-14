@@ -2,13 +2,10 @@
 Welcome to my ToDo App!
 
 ## General Information
-- Simple ToDo application
-- Write your ToDo's here and be productive person 
-
-## Technologies Used
 - Spring Boot Application
 - Automatically deployed on heroku via CirleCI
 - https://todo-application-tm.herokuapp.com/
+
 
 ## Technologies Used
 - REST API
@@ -18,8 +15,10 @@ Welcome to my ToDo App!
 - CircleCI
 - Heroku
 - Postman 2
+- JavaMail - Email verification
 
 ## Features
+- Registration, activation link in email, login
 - Mark your Task as Done
 - Change task name or description
 - Delete them when it's done

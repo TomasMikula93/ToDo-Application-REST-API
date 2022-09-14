@@ -1,6 +1,5 @@
 package com.example.todoapp;
 
-import com.example.todoapp.Models.DTOs.ToDoListDTO;
 import com.example.todoapp.Models.Task;
 import com.example.todoapp.Models.ToDoList;
 import com.example.todoapp.Models.ToDoUser;
