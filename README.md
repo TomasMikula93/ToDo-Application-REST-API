@@ -17,6 +17,7 @@ Welcome to my ToDo App!
 - JUnit & Integration tests
 - CircleCI
 - Heroku
+- Postman 2
 
 ## Features
 - Mark your Task as Done

@@ -36,7 +36,7 @@ public class ToDoUserServiceImpl implements ToDoUserService, UserDetailsService 
         String encodedPassword = passwordEncoder.encode(toDoUser.getPassword());
         ToDoList toDoList = new ToDoList();
         toDoListRepository.save(toDoList);
-        ToDoUser newToDoUser = new ToDoUser(toDoUser.getUsername(), encodedPassword, Roles.USER.getRole());
+        ToDoUser newToDoUser = new ToDoUser(toDoUser.getUsername(), encodedPassword, toDoUser.getEmail(), Roles.USER.getRole());
         toDoUserRepository.save(newToDoUser);
         newToDoUser.setToDoList(toDoList);
         toDoList.setToDoUser(newToDoUser);
