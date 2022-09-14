@@ -12,6 +12,7 @@ import lombok.Setter;
 public class TaskDTO {
     private long id;
     private String name;
-    private String Description;
+    private String description;
+    private String priority;
     private boolean isDone;
 }
