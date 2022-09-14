@@ -15,4 +15,8 @@ public interface ToDoUserService {
     List<UserDTO> makeListOfUsersDTO();
 
     boolean checkIfUsernameExists(String username);
+
+    boolean emailIsValidate(String email);
+
+    void enableAppUser(String username);
 }

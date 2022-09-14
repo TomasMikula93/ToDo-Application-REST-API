@@ -1,6 +1,5 @@
 package com.example.todoapp;
 
-import com.example.todoapp.Models.DTOs.ToDoListDTO;
 import com.example.todoapp.Models.Task;
 import com.example.todoapp.Models.ToDoList;
 import com.example.todoapp.Models.ToDoUser;
@@ -37,7 +36,7 @@ public class ToDoAppApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         //setUp
-        ToDoUser toDoUser = new ToDoUser("Adam", "password", "ROLE_USER");
+        ToDoUser toDoUser = new ToDoUser("Adam", "password", "adam@mail.cz",  "ROLE_USER");
         ToDoList toDoList = new ToDoList();
         Task task = new Task("Buy milk", "Buy milk when you will go to work tomorrow morning");
         toDoListRepository.save(toDoList);

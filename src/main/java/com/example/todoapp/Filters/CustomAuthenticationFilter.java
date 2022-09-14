@@ -93,7 +93,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         response.setHeader("error", failed.getMessage());
         response.setStatus(UNAUTHORIZED.value());
         Map<String, String> error = new HashMap<>();
-        error.put("error", "Username and/or password was incorrect!");
+        error.put("error", "Account isn't verified by email or username/password was incorrect!");
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), error);
     }

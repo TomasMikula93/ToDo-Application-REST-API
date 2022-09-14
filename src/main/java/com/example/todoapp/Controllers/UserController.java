@@ -1,18 +1,17 @@
 package com.example.todoapp.Controllers;
 
-import com.example.todoapp.Filters.JwtRequestFilter;
 import com.example.todoapp.Models.DTOs.ErrorMsgDTO;
-import com.example.todoapp.Models.DTOs.ToDoListDTO;
+import com.example.todoapp.Models.DTOs.MessageDTO;
 import com.example.todoapp.Models.DTOs.UserDTO;
-import com.example.todoapp.Models.Task;
 import com.example.todoapp.Models.ToDoUser;
-import com.example.todoapp.Services.ToDoListService;
+import com.example.todoapp.Registration.ConfirmationTokenService;
+import com.example.todoapp.Registration.EmailValidator;
 import com.example.todoapp.Services.ToDoUserService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @CrossOrigin(origins = "http://localhost:3000/")
 @RestController
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final ToDoUserService toDoUserService;
+    private final ConfirmationTokenService confirmationTokenService;
 
 
     @PostMapping("/registration")
@@ -28,14 +28,36 @@ public class UserController {
         if (toDoUserService.checkIfUsernameExists(toDoUser.getUsername())) {
             return ResponseEntity.status(400).body(new ErrorMsgDTO("This username already exists!"));
         }
+        if (!toDoUserService.emailIsValidate(toDoUser.getEmail())) {
+            return ResponseEntity.status(400).body(new ErrorMsgDTO("Email is not valid"));
+
+        }
         toDoUserService.saveNewUser(toDoUser);
         return ResponseEntity.status(200).body(new UserDTO(toDoUserService.findByUser(toDoUser).getId(), toDoUser.getUsername()));
+    }
+
+    @GetMapping(path = "registration/confirm")
+    public ResponseEntity<Object> confirm(@RequestParam("token") String token) {
+        if (confirmationTokenService
+                .getTokenOptional(token).isEmpty()) {
+            return ResponseEntity.status(400).body(new ErrorMsgDTO("Token was not found!"));
+        }
+        if (confirmationTokenService.findToken(token).getConfirmedAt() != null) {
+            return ResponseEntity.status(400).body(new ErrorMsgDTO("Account is already confirmed"));
+        }
+        if (confirmationTokenService.findToken(token).getExpiresAt().isBefore(LocalDateTime.now())) {
+            return ResponseEntity.status(400).body(new ErrorMsgDTO("Token is expired"));
+        }
+        confirmationTokenService.setConfirmedAt(token);
+        toDoUserService.enableAppUser(
+                confirmationTokenService.findToken(token).getToDoUser().getUsername());
+        return ResponseEntity.status(200).body(new MessageDTO("Thank you, your account is activated!"));
     }
 
 
     // just for testing React front-end s
     @GetMapping("/user")
-    public ResponseEntity<Object> getUsers(){
+    public ResponseEntity<Object> getUsers() {
         return ResponseEntity.status(200).body(toDoUserService.makeListOfUsersDTO());
     }
 
