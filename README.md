@@ -3,7 +3,7 @@ Welcome to my ToDo App!
 
 ## General Information
 - Spring Boot Application
-- Automatically deployed on heroku via CirleCI
+- Automatically deployed on heroku via CircleCI
 - https://todo-application-tm.herokuapp.com/
 
 
@@ -15,10 +15,11 @@ Welcome to my ToDo App!
 - CircleCI
 - Heroku
 - Postman 2
-- JavaMail - Email verification
+- JavaMail - Email verification, account activation link
 
 ## Features
 - Registration, activation link in email, login
+- Create tasks in your ToDo list
 - Mark your Task as Done
 - Change task name or description
 - Delete them when it's done
@@ -32,6 +33,6 @@ To do:
   https://www.linkedin.com/in/tom%C3%A1%C5%A1-mikula-29695b240/
 - feel free to contact me!
 
-## Description
+## My Notes
 - for EMAIL ACTIVATION LINK, i use gmail ( smtp.gmail.com ) . You must have EmailConfig and application.properties modified. 
   From May 2022, you must use generated "application password" (-> Google Account/Settings) instead of you login password.
