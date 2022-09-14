@@ -83,5 +83,23 @@ public class ToDoListServiceImpl implements ToDoListService {
         taskRepository.delete(task);
     }
 
+    @Override
+    public void changeTaskPriority(Task task) {
+        Task changedTask = taskRepository.findById(task.getId());
+//        if (task.getPriority() == "low") {
+//            changedTask.setPriority(Priority.LOW.getPriority());
+//        } else if (task.getPriority() == "normal") {
+//            changedTask.setPriority(Priority.NORMAL.getPriority());
+//        } else {
+//            changedTask.setPriority(Priority.HIGH.getPriority());
+//        }
+        switch (task.getPriority()) {
+            case "low" -> changedTask.setPriority(Priority.LOW.getPriority());
+            case "normal" -> changedTask.setPriority(Priority.NORMAL.getPriority());
+            case "high" -> changedTask.setPriority(Priority.HIGH.getPriority());
+        }
+        taskRepository.save(changedTask);
+    }
+
 
 }
