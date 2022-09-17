@@ -35,6 +35,7 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                 body(toDoListDTO);
     }
+
     @PostMapping("/task/{idOfToDoList}")
     public ResponseEntity<Object> addTask(@RequestHeader(value = "Authorization") String token, @RequestBody Task task, @PathVariable long idOfToDoList) {
         if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfToDoList) || token.isEmpty()) {
@@ -108,6 +109,17 @@ public class TaskController {
         toDoListService.changeTaskPriority(task);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                 body(new MessageDTO("Priority of task has been changed!"));
+    }
+
+    @GetMapping("/task/{idOfList}/filter/priority")
+    public ResponseEntity<Object> filterTasks(@RequestHeader(value = "Authorization") String token,
+                                              @RequestParam String value, @PathVariable long idOfList) {
+        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfList) || token.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This ToDo List does not belong to authenticated player"));
+        }
+
+        return ResponseEntity.status(200).body(toDoListService.filterTasksByPriority(value, idOfList));
     }
 
 }

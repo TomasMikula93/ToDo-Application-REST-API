@@ -86,19 +86,61 @@ public class ToDoListServiceImpl implements ToDoListService {
     @Override
     public void changeTaskPriority(Task task) {
         Task changedTask = taskRepository.findById(task.getId());
-//        if (task.getPriority() == "low") {
-//            changedTask.setPriority(Priority.LOW.getPriority());
-//        } else if (task.getPriority() == "normal") {
-//            changedTask.setPriority(Priority.NORMAL.getPriority());
-//        } else {
-//            changedTask.setPriority(Priority.HIGH.getPriority());
-//        }
+
         switch (task.getPriority()) {
             case "low" -> changedTask.setPriority(Priority.LOW.getPriority());
             case "normal" -> changedTask.setPriority(Priority.NORMAL.getPriority());
             case "high" -> changedTask.setPriority(Priority.HIGH.getPriority());
         }
         taskRepository.save(changedTask);
+    }
+
+    @Override
+    public ToDoListDTO filterTasksByPriority(String value, long idOfList) {
+        List<Task> listOfTasks = toDoListRepository.findById(idOfList).getListOfTasks();
+        List<Task> sublist;
+        List<TaskDTO> result = new ArrayList<>();
+
+        switch (value) {
+            case "low" -> {
+                sublist = listOfTasks.stream().filter(task -> Objects.equals(task.getPriority(), "low")).toList();
+                for (Task task : sublist) {
+                    result.add(new TaskDTO(
+                            task.getId(),
+                            task.getName(),
+                            task.getDescription(),
+                            task.getPriority(),
+                            task.isDone()
+                    ));
+                }
+            }
+            case "normal" -> {
+                sublist = listOfTasks.stream().filter(task -> Objects.equals(task.getPriority(), "normal")).toList();
+                for (Task task : sublist) {
+                    result.add(new TaskDTO(
+                            task.getId(),
+                            task.getName(),
+                            task.getDescription(),
+                            task.getPriority(),
+                            task.isDone()
+                    ));
+                }
+            }
+            case "high" -> {
+                sublist = listOfTasks.stream().filter(task -> Objects.equals(task.getPriority(), "high")).toList();
+                for (Task task : sublist) {
+                    result.add(new TaskDTO(
+                            task.getId(),
+                            task.getName(),
+                            task.getDescription(),
+                            task.getPriority(),
+                            task.isDone()
+                    ));
+                }
+            }
+        }
+
+        return new ToDoListDTO(result);
     }
 
 
