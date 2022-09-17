@@ -5,7 +5,6 @@ import com.example.todoapp.Models.DTOs.MessageDTO;
 import com.example.todoapp.Models.DTOs.UserDTO;
 import com.example.todoapp.Models.ToDoUser;
 import com.example.todoapp.Registration.ConfirmationTokenService;
-import com.example.todoapp.Registration.EmailValidator;
 import com.example.todoapp.Services.ToDoUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +27,7 @@ public class UserController {
         if (toDoUserService.checkIfUsernameExists(toDoUser.getUsername())) {
             return ResponseEntity.status(400).body(new ErrorMsgDTO("This username already exists!"));
         }
+
         if (!toDoUserService.emailIsValidate(toDoUser.getEmail())) {
             return ResponseEntity.status(400).body(new ErrorMsgDTO("Email is not valid"));
 
@@ -35,6 +35,8 @@ public class UserController {
         toDoUserService.saveNewUser(toDoUser);
         return ResponseEntity.status(200).body(new UserDTO(toDoUserService.findByUser(toDoUser).getId(), toDoUser.getUsername()));
     }
+
+    // TODO make endpoint for generating new confirmation Token
 
     @GetMapping(path = "registration/confirm")
     public ResponseEntity<Object> confirm(@RequestParam("token") String token) {

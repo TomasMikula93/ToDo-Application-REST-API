@@ -21,7 +21,7 @@ public class ConfirmationToken {
     private LocalDateTime createdAt;
     private LocalDateTime expiresAt;
     private LocalDateTime confirmedAt;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "toDoUser")
     private ToDoUser toDoUser;
 
