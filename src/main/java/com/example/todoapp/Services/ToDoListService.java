@@ -20,4 +20,6 @@ public interface ToDoListService {
     void deleteTask(Task task);
 
     void changeTaskPriority(Task task);
+
+    ToDoListDTO filterTasksByPriority(String value, long id);
 }
