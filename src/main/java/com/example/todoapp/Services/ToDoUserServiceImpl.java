@@ -29,7 +29,7 @@ public class ToDoUserServiceImpl implements ToDoUserService, UserDetailsService 
     private final ToDoUserRepository toDoUserRepository;
     private final ToDoListRepository toDoListRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EmailValidator emailValidator;
+    private final EmailValidation emailValidation;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailService emailService;
 
@@ -58,7 +58,7 @@ public class ToDoUserServiceImpl implements ToDoUserService, UserDetailsService 
                 newToDoUser
         );
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-        // TODO send email
+
         String link = "http://localhost:8080/api/registration/confirm?token=" + token;
         emailService.send(toDoUser.getEmail(), buildEmail(toDoUser.getUsername(), link));
     }
@@ -93,7 +93,7 @@ public class ToDoUserServiceImpl implements ToDoUserService, UserDetailsService 
 
     @Override
     public boolean emailIsValidate(String email) {
-        return emailValidator.test(email);
+        return emailValidation.isValidEmail(email);
     }
 
 

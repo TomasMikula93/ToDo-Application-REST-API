@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,8 +31,8 @@ public class ToDoUser implements UserDetails {
 
     @OneToOne(mappedBy = "toDoUser", cascade = CascadeType.ALL)
     private ToDoList toDoList;
-    @OneToOne(mappedBy = "toDoUser")
-    private ConfirmationToken confirmationToken;
+    @OneToMany(mappedBy = "toDoUser", cascade = CascadeType.ALL)
+    private List<ConfirmationToken> listOfConfirmationTokens;
 
 
     public ToDoUser(String username, String password, String role) {
