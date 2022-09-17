@@ -22,4 +22,6 @@ public interface ToDoListService {
     void changeTaskPriority(Task task);
 
     ToDoListDTO filterTasksByPriority(String value, long id);
+
+    ToDoListDTO filterTasksByStatus(String value, long id);
 }

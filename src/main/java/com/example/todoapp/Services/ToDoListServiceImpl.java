@@ -143,5 +143,40 @@ public class ToDoListServiceImpl implements ToDoListService {
         return new ToDoListDTO(result);
     }
 
+    @Override
+    public ToDoListDTO filterTasksByStatus(String value, long idOfList) {
+        List<Task> listOfTasks = toDoListRepository.findById(idOfList).getListOfTasks();
+        List<Task> sublist;
+        List<TaskDTO> result = new ArrayList<>();
+
+        switch (value) {
+            case "done" -> {
+                sublist = listOfTasks.stream().filter(task -> Objects.equals(task.isDone(), true)).toList();
+                for (Task task : sublist) {
+                    result.add(new TaskDTO(
+                            task.getId(),
+                            task.getName(),
+                            task.getDescription(),
+                            task.getPriority(),
+                            task.isDone()
+                    ));
+                }
+            }
+            case "undone" -> {
+                sublist = listOfTasks.stream().filter(task -> Objects.equals(task.isDone(), false)).toList();
+                for (Task task : sublist) {
+                    result.add(new TaskDTO(
+                            task.getId(),
+                            task.getName(),
+                            task.getDescription(),
+                            task.getPriority(),
+                            task.isDone()
+                    ));
+                }
+            }
+        }
+        return new ToDoListDTO(result);
+    }
+
 
 }
