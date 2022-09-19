@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,7 +23,8 @@ public class Task {
     private String priority;
     private boolean isDone;
 
-
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    private List<Tag> listOfTags;
 
     @ManyToOne
     @JoinColumn(name = "toDoList")
@@ -31,7 +33,9 @@ public class Task {
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
+        this.priority = "normal";
         this.isDone = false;
+        this.listOfTags = new ArrayList<>();
     }
 
     public Task(String name, String description, String priority) {
@@ -39,5 +43,6 @@ public class Task {
         this.description = description;
         this.priority = priority;
         this.isDone = false;
+        this.listOfTags = new ArrayList<>();
     }
 }

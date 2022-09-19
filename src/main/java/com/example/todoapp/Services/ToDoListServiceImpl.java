@@ -1,10 +1,13 @@
 package com.example.todoapp.Services;
 
+import com.example.todoapp.Models.DTOs.TagDTO;
 import com.example.todoapp.Models.DTOs.TaskDTO;
 import com.example.todoapp.Models.DTOs.ToDoListDTO;
 import com.example.todoapp.Models.Enums.Priority;
+import com.example.todoapp.Models.Tag;
 import com.example.todoapp.Models.Task;
 import com.example.todoapp.Models.ToDoList;
+import com.example.todoapp.Repositories.TagRepository;
 import com.example.todoapp.Repositories.TaskRepository;
 import com.example.todoapp.Repositories.ToDoListRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ public class ToDoListServiceImpl implements ToDoListService {
 
     private final ToDoListRepository toDoListRepository;
     private final TaskRepository taskRepository;
+    private final TagRepository tagRepository;
 
     @Override
     public boolean checkSizeOfList(long id) {
@@ -28,14 +32,26 @@ public class ToDoListServiceImpl implements ToDoListService {
 
     @Override
     public ToDoListDTO makeToDoListDTO(long id) {
-        List<Task> sublist = toDoListRepository.findById(id).getListOfTasks();
+        List<Task> taskSublist = toDoListRepository.findById(id).getListOfTasks();
         List<TaskDTO> list = new ArrayList<>();
-        for (Task task : sublist) {
-            list.add(new TaskDTO(task.getId(),
+        List<TagDTO> tagSublist = new ArrayList<>();
+
+
+        for (Task task : taskSublist) {
+            for (int i = 0; i < task.getListOfTags().size(); i++) {
+                tagSublist.add(new TagDTO(
+                        task.getListOfTags().get(i).getName()
+                ));
+            }
+            list.add(new TaskDTO(
+                    task.getId(),
                     task.getName(),
                     task.getDescription(),
                     task.getPriority(),
-                    task.isDone()));
+                    task.isDone(),
+                    List.copyOf(tagSublist)
+            ));
+            tagSublist.clear();
         }
         return new ToDoListDTO(list);
 
@@ -176,6 +192,18 @@ public class ToDoListServiceImpl implements ToDoListService {
             }
         }
         return new ToDoListDTO(result);
+    }
+
+    @Override
+    public void addTagToTask(long idOfTask, Tag tag) {
+        Task changedTask = taskRepository.findById(idOfTask);
+        Tag newTag = new Tag(tag.getName());
+
+        tagRepository.save(newTag);
+        newTag.setTask(changedTask);
+        changedTask.getListOfTags().add(newTag);
+        tagRepository.save(newTag);
+        taskRepository.save(changedTask);
     }
 
 
