@@ -36,8 +36,6 @@ public class UserController {
         return ResponseEntity.status(200).body(new UserDTO(toDoUserService.findByUser(toDoUser).getId(), toDoUser.getUsername()));
     }
 
-    // TODO make endpoint for generating new confirmation Token
-
     @GetMapping(path = "registration/confirm")
     public ResponseEntity<Object> confirm(@RequestParam("token") String token) {
         if (confirmationTokenService

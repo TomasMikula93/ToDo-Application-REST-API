@@ -4,6 +4,7 @@ import com.example.todoapp.Filters.JwtRequestFilter;
 import com.example.todoapp.Models.DTOs.ErrorMsgDTO;
 import com.example.todoapp.Models.DTOs.MessageDTO;
 import com.example.todoapp.Models.DTOs.ToDoListDTO;
+import com.example.todoapp.Models.Tag;
 import com.example.todoapp.Models.Task;
 import com.example.todoapp.Services.ToDoListService;
 import com.example.todoapp.Services.ToDoUserService;
@@ -111,9 +112,25 @@ public class TaskController {
                 body(new MessageDTO("Priority of task has been changed!"));
     }
 
+    @PostMapping("/task/tag/{idOfList}/{idOfTask}")
+    public ResponseEntity<Object> addTag(@RequestHeader(value = "Authorization") String token, @RequestBody Tag tag,
+                                         @PathVariable long idOfList, @PathVariable long idOfTask) {
+        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfList) || token.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This ToDo List does not belong to authenticated player"));
+        }
+
+        toDoListService.addTagToTask(idOfTask, tag);
+        return ResponseEntity.status(200).
+                body(new MessageDTO("Tag added"));
+
+    }
+
+
+
     @GetMapping("/task/{idOfList}/filter/priority")
     public ResponseEntity<Object> filterTasksByPriority(@RequestHeader(value = "Authorization") String token,
-                                              @RequestParam String value, @PathVariable long idOfList) {
+                                                        @RequestParam String value, @PathVariable long idOfList) {
         if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfList) || token.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This ToDo List does not belong to authenticated player"));
@@ -124,7 +141,7 @@ public class TaskController {
 
     @GetMapping("/task/{idOfList}/filter/status")
     public ResponseEntity<Object> filterTasksByStatus(@RequestHeader(value = "Authorization") String token,
-                                              @RequestParam String value, @PathVariable long idOfList) {
+                                                      @RequestParam String value, @PathVariable long idOfList) {
         if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfList) || token.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This ToDo List does not belong to authenticated player"));
