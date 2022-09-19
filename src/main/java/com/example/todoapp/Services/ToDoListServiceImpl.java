@@ -13,7 +13,9 @@ import com.example.todoapp.Repositories.ToDoListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -77,6 +79,7 @@ public class ToDoListServiceImpl implements ToDoListService {
     public void markTaskAsDone(Task task) {
         Task changedTask = taskRepository.findById(task.getId());
         changedTask.setDone(true);
+        changedTask.setDoneAt(new Date());
         taskRepository.save(changedTask);
     }
 
@@ -204,6 +207,37 @@ public class ToDoListServiceImpl implements ToDoListService {
         changedTask.getListOfTags().add(newTag);
         tagRepository.save(newTag);
         taskRepository.save(changedTask);
+    }
+
+    @Override
+    public ToDoListDTO filterTasksByTag(String value, long idOfList) {
+        List<Task> taskSublist = toDoListRepository.findById(idOfList).getListOfTasks();
+        List<TaskDTO> list = new ArrayList<>();
+        List<TagDTO> tagSublist = new ArrayList<>();
+
+        for (Task task : taskSublist) {
+            for (int i = 0; i < task.getListOfTags().size(); i++) {
+                tagSublist.add(new TagDTO(
+                        task.getListOfTags().get(i).getName()
+                ));
+            }
+            for (int i = 0; i < tagSublist.size(); i++) {
+                if (Objects.equals(tagSublist.get(i).getName(), value)) {
+                    list.add(new TaskDTO(
+                            task.getId(),
+                            task.getName(),
+                            task.getDescription(),
+                            task.getPriority(),
+                            task.isDone(),
+                            List.copyOf(tagSublist)
+
+                    ));
+                }
+            }
+            tagSublist.clear();
+        }
+        return new ToDoListDTO(list);
+
     }
 
 

@@ -5,7 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -22,6 +24,8 @@ public class Task {
 
     private String priority;
     private boolean isDone;
+    private Date createdAt;
+    private Date doneAt;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<Tag> listOfTags;
@@ -36,6 +40,7 @@ public class Task {
         this.priority = "normal";
         this.isDone = false;
         this.listOfTags = new ArrayList<>();
+        this.createdAt = new Date();
     }
 
     public Task(String name, String description, String priority) {
@@ -44,5 +49,6 @@ public class Task {
         this.priority = priority;
         this.isDone = false;
         this.listOfTags = new ArrayList<>();
+        this.createdAt = new Date();
     }
 }
