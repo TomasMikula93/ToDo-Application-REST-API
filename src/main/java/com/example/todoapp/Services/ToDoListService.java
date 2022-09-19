@@ -3,6 +3,7 @@ package com.example.todoapp.Services;
 import com.example.todoapp.Models.DTOs.ToDoListDTO;
 import com.example.todoapp.Models.Tag;
 import com.example.todoapp.Models.Task;
+import com.example.todoapp.Models.ToDoList;
 
 public interface ToDoListService {
     boolean checkSizeOfList(long id);
@@ -27,4 +28,6 @@ public interface ToDoListService {
     ToDoListDTO filterTasksByStatus(String value, long id);
 
     void addTagToTask(long idOfTask, Tag tag);
+
+    ToDoListDTO filterTasksByTag(String value, long idOfList);
 }

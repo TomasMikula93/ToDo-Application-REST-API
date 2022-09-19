@@ -127,7 +127,6 @@ public class TaskController {
     }
 
 
-
     @GetMapping("/task/{idOfList}/filter/priority")
     public ResponseEntity<Object> filterTasksByPriority(@RequestHeader(value = "Authorization") String token,
                                                         @RequestParam String value, @PathVariable long idOfList) {
@@ -150,4 +149,14 @@ public class TaskController {
         return ResponseEntity.status(200).body(toDoListService.filterTasksByStatus(value, idOfList));
     }
 
+    @GetMapping("/task/{idOfList}/filter/tag")
+    public ResponseEntity<Object> filterTasksByTag(@RequestHeader(value = "Authorization") String token,
+                                                   @RequestParam String value, @PathVariable long idOfList) {
+        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfList) || token.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This ToDo List does not belong to authenticated player"));
+        }
+
+        return ResponseEntity.status(200).body(toDoListService.filterTasksByTag(value, idOfList));
+    }
 }
