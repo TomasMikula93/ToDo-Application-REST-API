@@ -19,29 +19,29 @@ class UserControllerTest {
 
     @Test
     void registration() throws Exception {
-//        mockMvc.perform(post("/api/registration")// perform action inside POST,GET,DELETE + url. Parameters or path variable can be specified inside. It is string so ""+variable+"" can be used.
-//                        .content("""
-//                                {
-//                                    "username": "Thomas",
-//                                    "password": "password123",
-//                                    "email" : "tomas.mikula@centrum.cz
-//                                }""")
-//                        .contentType("application/json"))//you need to specify what type of content is inside of body
-//                .andExpect(status().is(200));
+        mockMvc.perform(post("/api/registration")// perform action inside POST,GET,DELETE + url. Parameters or path variable can be specified inside. It is string so ""+variable+"" can be used.
+                        .content("""
+                                {
+                                    "username": "Thomas",
+                                    "password": "password123",
+                                    "email" : "tomas.mikula@centrum.cz"
+                                }""")
+                        .contentType("application/json"))//you need to specify what type of content is inside of body
+                .andExpect(status().is(200));
 
     }
 
     @Test
     void getUsers() throws Exception {
-//        mockMvc.perform(post("/api/registration")// perform action inside POST,GET,DELETE + url. Parameters or path variable can be specified inside. It is string so ""+variable+"" can be used.
-//                        .content("""
-//                                {
-//                                    "username": "Tom",
-//                                    "password": "password123",
-//                                    "email" : "t.mikula@centrum.cz
-//                                }""")
-//                        .contentType("application/json"))//you need to specify what type of content is inside of body
-//                .andExpect(status().is(200));
+        mockMvc.perform(post("/api/registration")// perform action inside POST,GET,DELETE + url. Parameters or path variable can be specified inside. It is string so ""+variable+"" can be used.
+                        .content("""
+                                {
+                                    "username": "Tom",
+                                    "password": "password123",
+                                    "email" : "t.mikula@centrum.cz"
+                                }""")
+                        .contentType("application/json"))//you need to specify what type of content is inside of body
+                .andExpect(status().is(200));
 
 
         mockMvc.perform(get("/api/user"))
