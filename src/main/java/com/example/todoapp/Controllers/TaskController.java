@@ -159,4 +159,6 @@ public class TaskController {
 
         return ResponseEntity.status(200).body(toDoListService.filterTasksByTag(value, idOfList));
     }
+
+    //TODO input validation for all endpoints
 }

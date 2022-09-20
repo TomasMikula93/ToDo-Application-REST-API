@@ -13,7 +13,6 @@ import com.example.todoapp.Repositories.ToDoListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -222,7 +221,7 @@ public class ToDoListServiceImpl implements ToDoListService {
                 ));
             }
             for (int i = 0; i < tagSublist.size(); i++) {
-                if (Objects.equals(tagSublist.get(i).getName(), value)) {
+                if (Objects.equals(tagSublist.get(i).getName().substring(1), value)) { // value = #original for example
                     list.add(new TaskDTO(
                             task.getId(),
                             task.getName(),
