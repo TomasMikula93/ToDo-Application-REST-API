@@ -28,7 +28,6 @@ class UserControllerTest {
                                 }""")
                         .contentType("application/json"))//you need to specify what type of content is inside of body
                 .andExpect(status().is(200));
-
     }
 
     @Test
