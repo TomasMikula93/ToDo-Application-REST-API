@@ -254,10 +254,10 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This ToDo List does not exists"));
         }
-//        if (value.isEmpty() || value.isBlank()) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-//                    body(new ErrorMsgDTO("Incorrect value for filter"));
-//        }
+        if (value.isEmpty() || value.isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Incorrect value for filter"));
+        }
         return ResponseEntity.status(200).body(toDoListService.filterTasksByTag(value, idOfToDoList));
     }
 
