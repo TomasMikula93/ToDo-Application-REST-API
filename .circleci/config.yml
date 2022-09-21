@@ -64,7 +64,7 @@ workflows:
       - heroku/deploy-via-git:
           force: false
           maintenance-mode: false
-          api-key: HEROKU_API_KEY # environment variables, i set it in circleCI -> project settings
+          api-key: HEROKU_API_KEY
           app-name: todo-application-tm
           branch: master
 
