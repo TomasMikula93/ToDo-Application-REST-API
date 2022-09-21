@@ -27,6 +27,13 @@ public class UserController {
         if (toDoUserService.checkIfUsernameExists(toDoUser.getUsername())) {
             return ResponseEntity.status(400).body(new ErrorMsgDTO("This username already exists!"));
         }
+        if (toDoUser.getUsername().isEmpty() || toDoUser.getUsername().isBlank() || toDoUser.getUsername() == null) {
+            return ResponseEntity.status(400).body(new ErrorMsgDTO("Incorrect username."));
+        }
+        if (toDoUser.getPassword().isEmpty() || toDoUser.getPassword().isBlank() || toDoUser.getPassword() == null
+                || toDoUser.getPassword().length() < 8) {
+            return ResponseEntity.status(400).body(new ErrorMsgDTO("Incorrect password."));
+        }
 
         if (!toDoUserService.emailIsValidate(toDoUser.getEmail())) {
             return ResponseEntity.status(400).body(new ErrorMsgDTO("Email is not valid"));
