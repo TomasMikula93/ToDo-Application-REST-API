@@ -30,6 +30,10 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This ToDo List does not belong to authenticated player"));
         }
+        if (!toDoListService.checkIfListExists(idOfToDoList)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This ToDo List does not exists"));
+        }
         if (toDoListService.checkSizeOfList(idOfToDoList)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("Your ToDo list is empty"));
@@ -83,43 +87,70 @@ public class TaskController {
                 body(new MessageDTO("Task is done"));
     }
 
-    @PutMapping("/task/name/{idOfList}")
+    @PutMapping("/task/name/{idOfToDoList}")
     public ResponseEntity<Object> changeTaskName(@RequestHeader(value = "Authorization") String token,
-                                                 @RequestBody Task task, @PathVariable long idOfList) {
-        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfList) || token.isEmpty()
+                                                 @RequestBody Task task, @PathVariable long idOfToDoList) {
+        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfToDoList) || token.isEmpty()
                 || token.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This ToDo List does not belong to authenticated player"));
         }
+        if (!toDoListService.checkIfListExists(idOfToDoList)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This ToDo List does not exists"));
+        }
         if (!toDoListService.checkIfTaskExists(task.getId())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This task does not exists"));
+        }
+        if (task.getName().isEmpty() || task.getName().isBlank() || task.getName() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Incorrect name"));
         }
         toDoListService.changeTaskName(task);
         return ResponseEntity.status(200).
                 body(new MessageDTO("Name of task has been changed!"));
     }
 
-    @PutMapping("/task/description/{idOfList}")
+    @PutMapping("/task/description/{idOfToDoList}")
     public ResponseEntity<Object> changeTaskDescription(@RequestHeader(value = "Authorization") String token,
-                                                        @RequestBody Task task, @PathVariable long idOfList) {
-        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfList) || token.isEmpty()
+                                                        @RequestBody Task task, @PathVariable long idOfToDoList) {
+        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfToDoList) || token.isEmpty()
                 || token.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This ToDo List does not belong to authenticated player"));
         }
-
+        if (!toDoListService.checkIfListExists(idOfToDoList)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This ToDo List does not exists"));
+        }
+        if (!toDoListService.checkIfTaskExists(task.getId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This task does not exists"));
+        }
+        if (task.getDescription().isEmpty() || task.getDescription().isBlank() || task.getDescription() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Incorrect description"));
+        }
         toDoListService.changeTaskDescription(task);
         return ResponseEntity.status(200).
                 body(new MessageDTO("Description of task has been changed!"));
     }
 
-    @DeleteMapping("/task/{idOfList}")
+    @DeleteMapping("/task/{idOfToDoList}")
     public ResponseEntity<Object> deleteTask(@RequestHeader(value = "Authorization") String token,
-                                             @RequestBody Task task, @PathVariable long idOfList) {
-        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfList) || token.isEmpty() || token.isBlank()) {
+                                             @RequestBody Task task, @PathVariable long idOfToDoList) {
+        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfToDoList) || token.isEmpty() || token.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This ToDo List does not belong to authenticated player"));
+        }
+        if (!toDoListService.checkIfListExists(idOfToDoList)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This ToDo List does not exists"));
+        }
+        if (!toDoListService.checkIfTaskExists(task.getId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This task does not exists"));
         }
         toDoListService.deleteTask(task);
         return ResponseEntity.status(200).
@@ -127,28 +158,47 @@ public class TaskController {
 
     }
 
-    @PutMapping("/task/priority/{idOfList}")
+    @PutMapping("/task/priority/{idOfToDoList}")
     public ResponseEntity<Object> changePriority(@RequestHeader(value = "Authorization") String token,
-                                                 @RequestBody Task task, @PathVariable long idOfList) {
-        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfList) || token.isEmpty()
+                                                 @RequestBody Task task, @PathVariable long idOfToDoList) {
+        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfToDoList) || token.isEmpty()
                 || token.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This ToDo List does not belong to authenticated player"));
         }
-
+        if (!toDoListService.checkIfListExists(idOfToDoList)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This ToDo List does not exists"));
+        }
+        if (!toDoListService.checkIfTaskExists(task.getId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This task does not exists"));
+        }
         toDoListService.changeTaskPriority(task);
         return ResponseEntity.status(200).
                 body(new MessageDTO("Priority of task has been changed!"));
     }
 
-    @PostMapping("/task/tag/{idOfList}/{idOfTask}")
+    @PostMapping("/task/tag/{idOfToDoList}/{idOfTask}")
     public ResponseEntity<Object> addTag(@RequestHeader(value = "Authorization") String token, @RequestBody Tag tag,
-                                         @PathVariable long idOfList, @PathVariable long idOfTask) {
-        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfList) || token.isEmpty()) {
+                                         @PathVariable long idOfToDoList, @PathVariable long idOfTask) {
+        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfToDoList) || token.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This ToDo List does not belong to authenticated player"));
         }
+        if (!toDoListService.checkIfListExists(idOfToDoList)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This ToDo List does not exists"));
+        }
 
+        if (!toDoListService.checkIfTaskExists(idOfTask)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This task does not exists"));
+        }
+        if (tag.getName().isBlank() || tag.getName().isEmpty() || tag.getName() == null || !tag.getName().startsWith("#")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Incorrect tag name"));
+        }
         toDoListService.addTagToTask(idOfTask, tag);
         return ResponseEntity.status(200).
                 body(new MessageDTO("Tag added"));
@@ -156,37 +206,59 @@ public class TaskController {
     }
 
 
-    @GetMapping("/task/{idOfList}/filter/priority")
+    @GetMapping("/task/{idOfToDoList}/filter/priority")
     public ResponseEntity<Object> filterTasksByPriority(@RequestHeader(value = "Authorization") String token,
-                                                        @RequestParam String value, @PathVariable long idOfList) {
-        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfList) || token.isEmpty() || token.isBlank()) {
+                                                        @RequestParam String value, @PathVariable long idOfToDoList) {
+        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfToDoList) || token.isEmpty() || token.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This ToDo List does not belong to authenticated player"));
         }
-
-        return ResponseEntity.status(200).body(toDoListService.filterTasksByPriority(value, idOfList));
+        if (!toDoListService.checkIfListExists(idOfToDoList)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This ToDo List does not exists"));
+        }
+        if (value.isEmpty() || value.isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Incorrect value for filter"));
+        }
+        return ResponseEntity.status(200).body(toDoListService.filterTasksByPriority(value, idOfToDoList));
     }
 
-    @GetMapping("/task/{idOfList}/filter/status")
+    @GetMapping("/task/{idOfToDoList}/filter/status")
     public ResponseEntity<Object> filterTasksByStatus(@RequestHeader(value = "Authorization") String token,
-                                                      @RequestParam String value, @PathVariable long idOfList) {
-        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfList) || token.isEmpty() || token.isBlank()) {
+                                                      @RequestParam String value, @PathVariable long idOfToDoList) {
+        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfToDoList) || token.isEmpty() || token.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This ToDo List does not belong to authenticated player"));
         }
+        if (!toDoListService.checkIfListExists(idOfToDoList)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This ToDo List does not exists"));
+        }
+        if (value.isEmpty() || value.isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Incorrect value for filter"));
+        }
 
-        return ResponseEntity.status(200).body(toDoListService.filterTasksByStatus(value, idOfList));
+        return ResponseEntity.status(200).body(toDoListService.filterTasksByStatus(value, idOfToDoList));
     }
 
-    @GetMapping("/task/{idOfList}/filter/tag")
+    @GetMapping("/task/{idOfToDoList}/filter/tag")
     public ResponseEntity<Object> filterTasksByTag(@RequestHeader(value = "Authorization") String token,
-                                                   @RequestParam String value, @PathVariable long idOfList) {
-        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfList) || token.isEmpty() || token.isBlank()) {
+                                                   @RequestParam String value, @PathVariable long idOfToDoList) {
+        if (!toDoUserService.userOwnsToDoList(JwtRequestFilter.username, idOfToDoList) || token.isEmpty() || token.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This ToDo List does not belong to authenticated player"));
         }
-
-        return ResponseEntity.status(200).body(toDoListService.filterTasksByTag(value, idOfList));
+        if (!toDoListService.checkIfListExists(idOfToDoList)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("This ToDo List does not exists"));
+        }
+        if (value.isEmpty() || value.isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Incorrect value for filter"));
+        }
+        return ResponseEntity.status(200).body(toDoListService.filterTasksByTag(value, idOfToDoList));
     }
 
     //TODO input validation for all endpoints
