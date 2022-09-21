@@ -239,5 +239,10 @@ public class ToDoListServiceImpl implements ToDoListService {
 
     }
 
+    @Override
+    public boolean checkIfTaskExists(long id) {
+        return taskRepository.findOptionalById(id).isPresent();
+    }
+
 
 }

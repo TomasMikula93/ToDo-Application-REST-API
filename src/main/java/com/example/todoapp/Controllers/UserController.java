@@ -61,6 +61,7 @@ public class UserController {
         return ResponseEntity.status(200).body(new MessageDTO("Thank you, your account is activated!"));
     }
 
+    // TODO make endpoint for generating new confirmationToken
 
     // just for testing React front-end s
     @GetMapping("/user")
