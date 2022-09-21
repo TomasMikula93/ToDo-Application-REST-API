@@ -30,4 +30,6 @@ public interface ToDoListService {
     void addTagToTask(long idOfTask, Tag tag);
 
     ToDoListDTO filterTasksByTag(String value, long idOfList);
+
+    boolean checkIfTaskExists(long id);
 }
