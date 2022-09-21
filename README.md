@@ -22,6 +22,7 @@ Welcome to my ToDo App!
 - Create tasks in your ToDo list
 - Mark your Task as Done
 - Change task name or description
+- Filter tasks by priority, tags, is/is not done
 - Delete them when it's done
 
 ## Room for Improvement
