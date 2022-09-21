@@ -9,7 +9,7 @@ Welcome to my ToDo App!
 
 ## Technologies Used
 - REST API
-- JWT (Jason Web Token)
+- JWT (JSON Web Token)
 - MySQL / H2 database
 - JUnit & Integration tests
 - CircleCI
