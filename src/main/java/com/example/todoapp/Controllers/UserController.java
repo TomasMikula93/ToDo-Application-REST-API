@@ -27,6 +27,9 @@ public class UserController {
         if (toDoUserService.checkIfUsernameExists(toDoUser.getUsername())) {
             return ResponseEntity.status(400).body(new ErrorMsgDTO("This username already exists!"));
         }
+        if (toDoUserService.checkIfEmailExists(toDoUser.getEmail())) {
+            return ResponseEntity.status(400).body(new ErrorMsgDTO("This email already exists!"));
+        }
         if (toDoUser.getUsername().isEmpty() || toDoUser.getUsername().isBlank() || toDoUser.getUsername() == null) {
             return ResponseEntity.status(400).body(new ErrorMsgDTO("Incorrect username."));
         }
@@ -61,7 +64,24 @@ public class UserController {
         return ResponseEntity.status(200).body(new MessageDTO("Thank you, your account is activated!"));
     }
 
-    // TODO make endpoint for generating new confirmationToken
+    @GetMapping("registration/newToken")
+    public ResponseEntity<Object> generateNewConfirmToken(@RequestBody ToDoUser toDoUser) {
+        if (!toDoUserService.checkIfUsernameExists(toDoUser.getUsername())) {
+            return ResponseEntity.status(400).body(new ErrorMsgDTO("This username doesn't exist!"));
+        }
+        if (!toDoUserService.emailIsValidate(toDoUser.getEmail())) {
+            return ResponseEntity.status(400).body(new ErrorMsgDTO("Email is not valid"));
+        }
+        if(!toDoUserService.emailMatches(toDoUser.getEmail(), toDoUser.getUsername())){
+            return ResponseEntity.status(400).body(new ErrorMsgDTO("Incorrect email for this username"));
+        }
+        if (toDoUserService.userAccountIsEnabled(toDoUser.getUsername())) {
+            return ResponseEntity.status(400).body(new ErrorMsgDTO("Account is already activated"));
+        }
+
+        toDoUserService.generateNewToken(toDoUser.getUsername(), toDoUser.getEmail());
+        return ResponseEntity.status(200).body(new MessageDTO("Your new confirmation token has been generated!"));
+    }
 
     // just for testing React front-end s
     @GetMapping("/user")

@@ -19,4 +19,12 @@ public interface ToDoUserService {
     boolean emailIsValidate(String email);
 
     void enableAppUser(String username);
+
+    void generateNewToken(String username, String email);
+
+    boolean userAccountIsEnabled(String username);
+
+    boolean emailMatches(String email, String username);
+
+    boolean checkIfEmailExists(String email);
 }
