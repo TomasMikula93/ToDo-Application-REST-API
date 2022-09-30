@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -63,7 +64,22 @@ public class ToDoUserServiceImpl implements ToDoUserService, UserDetailsService 
         emailService.send(toDoUser.getEmail(), buildEmail(toDoUser.getUsername(), link));
     }
 
+    @Override
+    public void generateNewToken(String username, String email) {
+        ToDoUser toDoUser = toDoUserRepository.findByUsername(username);
 
+        String token = UUID.randomUUID().toString();
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15),
+                toDoUser
+        );
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        String link = "http://localhost:8080/api/registration/confirm?token=" + token;
+        emailService.send(toDoUser.getEmail(), buildEmail(toDoUser.getUsername(), link));
+    }
 
     @Override
     public ToDoUser findByUser(ToDoUser toDoUser) {
@@ -90,7 +106,10 @@ public class ToDoUserServiceImpl implements ToDoUserService, UserDetailsService 
     public boolean checkIfUsernameExists(String username) {
         return toDoUserRepository.findOptionalByUsername(username).isPresent();
     }
-
+    @Override
+    public boolean checkIfEmailExists(String email) {
+        return toDoUserRepository.findOptionalByEmail(email).isPresent();
+    }
     @Override
     public boolean emailIsValidate(String email) {
         return emailValidation.isValidEmail(email);
@@ -103,6 +122,19 @@ public class ToDoUserServiceImpl implements ToDoUserService, UserDetailsService 
         toDoUser.setEnabled(true);
         toDoUserRepository.save(toDoUser);
     }
+
+    @Override
+    public boolean userAccountIsEnabled(String username) {
+        return toDoUserRepository.findByUsername(username).isEnabled();
+    }
+
+    @Override
+    public boolean emailMatches(String email, String username) {
+        ToDoUser toDoUser = toDoUserRepository.findByUsername(username);
+        return Objects.equals(toDoUser.getEmail(), email);
+    }
+
+
 
     @Override
     public boolean userOwnsToDoList(String username, Long toDoListId) {

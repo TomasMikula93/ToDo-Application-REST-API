@@ -49,8 +49,8 @@ public class ToDoUser implements UserDetails {
         this.password = password;
         this.email = email;
         this.role = role;
-
-
+        this.enabled = false;
+        this.locked = false;
     }
 
     @Override

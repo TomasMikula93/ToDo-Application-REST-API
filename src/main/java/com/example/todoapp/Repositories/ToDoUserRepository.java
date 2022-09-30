@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface ToDoUserRepository extends JpaRepository<ToDoUser, Long> {
     ToDoUser findByUsername(String username);
     Optional<ToDoUser> findOptionalByUsername(String username);
+    Optional<ToDoUser> findOptionalByEmail(String email);
 }
