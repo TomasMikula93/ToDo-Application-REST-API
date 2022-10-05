@@ -38,6 +38,10 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("Your ToDo list is empty"));
         }
+        if(!toDoUserService.userAccountIsEnabled(JwtRequestFilter.username)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Your account isn't activated yet, check you mail for activation link."));
+        }
         ToDoListDTO toDoListDTO = toDoListService.makeToDoListDTO(idOfToDoList);
         return ResponseEntity.status(200).
                 body(toDoListDTO);
@@ -61,6 +65,10 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("Incorrect name or description"));
         }
+        if(!toDoUserService.userAccountIsEnabled(JwtRequestFilter.username)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Your account isn't activated yet, check you mail for activation link."));
+        }
         toDoListService.addTaskToList(task, idOfToDoList);
         return ResponseEntity.status(200).
                 body(new MessageDTO("Task has been created"));
@@ -81,6 +89,10 @@ public class TaskController {
         if (!toDoListService.checkIfTaskExists(task.getId())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This task does not exists"));
+        }
+        if(!toDoUserService.userAccountIsEnabled(JwtRequestFilter.username)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Your account isn't activated yet, check you mail for activation link."));
         }
         toDoListService.markTaskAsDone(task);
         return ResponseEntity.status(200).
@@ -107,6 +119,10 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("Incorrect name"));
         }
+        if(!toDoUserService.userAccountIsEnabled(JwtRequestFilter.username)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Your account isn't activated yet, check you mail for activation link."));
+        }
         toDoListService.changeTaskName(task);
         return ResponseEntity.status(200).
                 body(new MessageDTO("Name of task has been changed!"));
@@ -132,6 +148,10 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("Incorrect description"));
         }
+        if(!toDoUserService.userAccountIsEnabled(JwtRequestFilter.username)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Your account isn't activated yet, check you mail for activation link."));
+        }
         toDoListService.changeTaskDescription(task);
         return ResponseEntity.status(200).
                 body(new MessageDTO("Description of task has been changed!"));
@@ -151,6 +171,10 @@ public class TaskController {
         if (!toDoListService.checkIfTaskExists(task.getId())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This task does not exists"));
+        }
+        if(!toDoUserService.userAccountIsEnabled(JwtRequestFilter.username)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Your account isn't activated yet, check you mail for activation link."));
         }
         toDoListService.deleteTask(task);
         return ResponseEntity.status(200).
@@ -173,6 +197,10 @@ public class TaskController {
         if (!toDoListService.checkIfTaskExists(task.getId())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("This task does not exists"));
+        }
+        if(!toDoUserService.userAccountIsEnabled(JwtRequestFilter.username)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Your account isn't activated yet, check you mail for activation link."));
         }
         toDoListService.changeTaskPriority(task);
         return ResponseEntity.status(200).
@@ -199,6 +227,10 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("Incorrect tag name"));
         }
+        if(!toDoUserService.userAccountIsEnabled(JwtRequestFilter.username)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Your account isn't activated yet, check you mail for activation link."));
+        }
         toDoListService.addTagToTask(idOfTask, tag);
         return ResponseEntity.status(200).
                 body(new MessageDTO("Tag added"));
@@ -221,6 +253,10 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("Incorrect value for filter"));
         }
+        if(!toDoUserService.userAccountIsEnabled(JwtRequestFilter.username)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Your account isn't activated yet, check you mail for activation link."));
+        }
         return ResponseEntity.status(200).body(toDoListService.filterTasksByPriority(value, idOfToDoList));
     }
 
@@ -239,7 +275,10 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("Incorrect value for filter"));
         }
-
+        if(!toDoUserService.userAccountIsEnabled(JwtRequestFilter.username)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Your account isn't activated yet, check you mail for activation link."));
+        }
         return ResponseEntity.status(200).body(toDoListService.filterTasksByStatus(value, idOfToDoList));
     }
 
@@ -257,6 +296,10 @@ public class TaskController {
         if (value.isEmpty() || value.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body(new ErrorMsgDTO("Incorrect value for filter"));
+        }
+        if(!toDoUserService.userAccountIsEnabled(JwtRequestFilter.username)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(new ErrorMsgDTO("Your account isn't activated yet, check you mail for activation link."));
         }
         return ResponseEntity.status(200).body(toDoListService.filterTasksByTag(value, idOfToDoList));
     }
