@@ -110,6 +110,18 @@ public class ToDoUserServiceImpl implements ToDoUserService, UserDetailsService 
     public boolean checkIfEmailExists(String email) {
         return toDoUserRepository.findOptionalByEmail(email).isPresent();
     }
+
+    @Override
+    public boolean checkIfTokenExpired(ToDoUser toDoUser) {
+        ToDoUser user = toDoUserRepository.findByUsername(toDoUser.getUsername());
+        for (int i = 0; i < user.getListOfConfirmationTokens().size(); i++) {
+            if(user.getListOfConfirmationTokens().get(i).getConfirmedAt() == null){
+                return true;
+            }
+        }
+        return false;s
+    }
+
     @Override
     public boolean emailIsValidate(String email) {
         return emailValidation.isValidEmail(email);

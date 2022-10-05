@@ -27,4 +27,6 @@ public interface ToDoUserService {
     boolean emailMatches(String email, String username);
 
     boolean checkIfEmailExists(String email);
+
+    boolean checkIfTokenExpired(ToDoUser toDoUser);
 }
